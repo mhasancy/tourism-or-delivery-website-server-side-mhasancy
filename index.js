@@ -19,7 +19,7 @@ async function run() {
     await client.connect();
     const database = client.db("travelNowMaster");
     const servicesCollection = database.collection("services");
-    const travelersCollection = database.collection("travelers");
+    const ordersCollection = database.collection("orders");
     // Query for a movie that has the title 'Back to the Future'
 
     app.get("/services", async (req, res) => {
@@ -28,16 +28,24 @@ async function run() {
       res.send(services);
     });
 
-    app.get("/travelers", async (req, res) => {
-      const cursor = travelersCollection.find({});
-      const travelers = await cursor.toArray();
-      res.send(travelers);
+    app.get("/orders", async (req, res) => {
+      const cursor = ordersCollection.find({});
+      const orders = await cursor.toArray();
+      res.send(orders);
     });
+
     //post
     app.post("/services", async (req, res) => {
       const service = req.body;
       const result = await servicesCollection.insertOne(service);
       res.json(result);
+    });
+    //post orders
+    app.post("/orders", async (req, res) => {
+      const order = req.body;
+      const result = await ordersCollection.insertOne(order);
+      res.json(result);
+      console.log(result);
     });
   } finally {
     // Ensures that the client will close when you finish/error
