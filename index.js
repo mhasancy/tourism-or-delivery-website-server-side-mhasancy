@@ -18,20 +18,26 @@ async function run() {
   try {
     await client.connect();
     const database = client.db("travelNowMaster");
+    const servicesCollection = database.collection("services");
     const travelersCollection = database.collection("travelers");
-    const usersCollection = database.collection("users");
     // Query for a movie that has the title 'Back to the Future'
 
     app.get("/services", async (req, res) => {
-      const cursor = travelersCollection.find({});
+      const cursor = servicesCollection.find({});
       const services = await cursor.toArray();
       res.send(services);
     });
 
-    app.get("/users", async (req, res) => {
-      const cursor = usersCollection.find({});
-      const users = await cursor.toArray();
-      res.send(users);
+    app.get("/travelers", async (req, res) => {
+      const cursor = travelersCollection.find({});
+      const travelers = await cursor.toArray();
+      res.send(travelers);
+    });
+    //post
+    app.post("/services", async (req, res) => {
+      const service = req.body;
+      const result = await servicesCollection.insertOne(service);
+      res.json(result);
     });
   } finally {
     // Ensures that the client will close when you finish/error
