@@ -24,6 +24,7 @@ async function run() {
     await client.connect();
     const database = client.db("travelNowMaster");
     const servicesCollection = database.collection("services");
+    const blogsCollection = database.collection("blogs");
     const ordersCollection = database.collection("orders");
 
     //data load to the services
@@ -31,6 +32,12 @@ async function run() {
       const cursor = servicesCollection.find({});
       const services = await cursor.toArray();
       res.send(services);
+    });
+    //data load to the blogs
+    app.get("/blogs", async (req, res) => {
+      const cursor = blogsCollection.find({});
+      const blogs = await cursor.toArray();
+      res.send(blogs);
     });
 
     //data load to the orders
