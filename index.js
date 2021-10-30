@@ -1,4 +1,4 @@
-//imported file
+//imported and express file
 const express = require("express");
 const { MongoClient } = require("mongodb");
 const ObjectId = require("mongodb").ObjectId;
@@ -6,16 +6,19 @@ require("dotenv").config();
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
+
 //middleware
 app.use(cors());
 app.use(express.json());
 
+//database user-password connection
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.86fnr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+//data async await function
 async function run() {
   try {
     await client.connect();
@@ -76,16 +79,15 @@ async function run() {
       res.json(result);
     });
   } finally {
-    // Ensures that the client will close when you finish/error
     //   await client.close();
   }
 }
 run().catch(console.dir);
-
+//data testing if server is running
 app.get("/", (req, res) => {
   res.send("Travel Now server is running.");
 });
-
+//server is running and showing server console
 app.listen(port, () => {
   console.log("Running on port ", port);
 });
